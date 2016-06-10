@@ -1,0 +1,6 @@
+framework module Pods_CrossPlatformUITests {
+  umbrella header "Pods-CrossPlatformUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
