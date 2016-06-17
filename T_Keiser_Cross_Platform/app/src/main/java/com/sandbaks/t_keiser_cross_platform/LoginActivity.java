@@ -1,6 +1,8 @@
 package com.sandbaks.t_keiser_cross_platform;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,7 +28,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final String FIREBASE = "https://sandbaks.firebaseio.com/";
     public static final String FIREBASE_USERS = "https://sandbaks.firebaseio.com/users/";
     // Global Variables
-    String authO;
     String emailString;
     String passString;
     Firebase mFirebase;
@@ -127,6 +128,11 @@ public class LoginActivity extends AppCompatActivity {
                     // Empty Field(s)
                     Toast.makeText(getApplicationContext(), "Please Enter Email & Password.",
                             Toast.LENGTH_SHORT).show();
+                } else if (passString.length() < 5) {
+                    // Password Length must be at least 6 characters long
+                    Toast.makeText(getApplicationContext(),
+                            "Password must be at LEAST 6 characters long.",
+                            Toast.LENGTH_SHORT).show();
                 } else {
                     // Attempt Login
                     mFirebase.createUser(emailString, passString, new Firebase.ResultHandler() {
@@ -148,9 +154,26 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
                 }
-
             }
         });
+    }
+
+    // Check Internet Connection
+    public boolean isConnected() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null) {
+            if (netInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                return true;
+            } else if (netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                return true;
+            }
+        } else {
+            Toast.makeText(this, "No Internet Connection.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        Toast.makeText(this, "No Internet Connection.", Toast.LENGTH_LONG).show();
+        return false;
     }
 
     // Save User Info To Local Storage

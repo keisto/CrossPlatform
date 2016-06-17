@@ -1,6 +1,8 @@
 package com.sandbaks.t_keiser_cross_platform;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -35,38 +37,41 @@ public class UserEditActivity extends AppCompatActivity {
         mFirebase = new Firebase(LoginActivity.FIREBASE);
         // Get User
         JSONObject u = readData();
-        // Check User
-        try {
-            mFirebase.authWithPassword(u.getString("email"), u.getString("password"),
-                    new Firebase.AuthResultHandler() {
-                @Override
-                public void onAuthenticated(AuthData authData) {
-                    // Success
-                }
-                @Override
-                public void onAuthenticationError(FirebaseError firebaseError) {
-                    // Failed
-                    Toast.makeText(getApplicationContext(), "User Not Vaild!",
-                            Toast.LENGTH_SHORT).show();
-                    // Return to Login
-                    if (readData()!=null) {
-                        // Delete User Saved Login
-                        File external = getApplicationContext()
-                                .getExternalFilesDir(null);
-                        File file = new File(external, "user.txt");
-                        if (file.exists()) {
-                            file.delete();
-                        }
-                        // Go To Login
-                        Intent i = new Intent(getApplicationContext(),
-                                LoginActivity.class);
-                        startActivity(i);
-                        finish();
-                    }
-                }
-            });
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (isConnected()) {
+            // Check User
+            try {
+                mFirebase.authWithPassword(u.getString("email"), u.getString("password"),
+                        new Firebase.AuthResultHandler() {
+                            @Override
+                            public void onAuthenticated(AuthData authData) {
+                                // Success
+                            }
+
+                            @Override
+                            public void onAuthenticationError(FirebaseError firebaseError) {
+                                // Failed
+                                Toast.makeText(getApplicationContext(), "User Not Vaild!",
+                                        Toast.LENGTH_SHORT).show();
+                                // Return to Login
+                                if (readData() != null) {
+                                    // Delete User Saved Login
+                                    File external = getApplicationContext()
+                                            .getExternalFilesDir(null);
+                                    File file = new File(external, "user.txt");
+                                    if (file.exists()) {
+                                        file.delete();
+                                    }
+                                    // Go To Login
+                                    Intent i = new Intent(getApplicationContext(),
+                                            LoginActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            }
+                        });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         eFirstname = (EditText) findViewById(R.id.firstname);
@@ -86,35 +91,42 @@ public class UserEditActivity extends AppCompatActivity {
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Check Values
-                String firstname = eFirstname.getText().toString().trim();
-                String lastname  = eLastname.getText().toString().trim();
-                int age;
-                if (eAge.getText().toString().trim().equals("")) {
-                    age = 0;
-                } else {
-                    age = Integer.parseInt(eAge.getText().toString().trim());
-                }
-                if (firstname.equals("")||lastname.equals("")||age==0) {
-                    // Inputs Not Valid
-                    Toast.makeText(getApplicationContext(), "Please Enter All Fields.",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    // Try Enter Inputs to Database
-                    AuthData autho = mFirebase.getAuth();
-                    if (autho != null) {
-                        // Success
-                        mFirebase.child("users").child(autho.getUid())
-                                .child("firstname").setValue(firstname);
-                        mFirebase.child("users").child(autho.getUid())
-                                .child("lastname").setValue(lastname);
-                        mFirebase.child("users").child(autho.getUid())
-                                .child("age").setValue(age);
-                        finish();
+                if (isConnected()) {
+                    // Check Values
+                    String firstname = eFirstname.getText().toString().trim();
+                    String lastname = eLastname.getText().toString().trim();
+                    int age;
+                    if (eAge.getText().toString().trim().equals("")) {
+                        age = 0;
                     } else {
-                        // Failed
-                        Toast.makeText(getApplicationContext(), "Update Failed.",
+                        age = Integer.parseInt(eAge.getText().toString().trim());
+                    }
+                    if (firstname.equals("") || lastname.equals("") || age == 0) {
+                        // Inputs Not Valid
+                        Toast.makeText(getApplicationContext(), "Please Enter All Fields.",
                                 Toast.LENGTH_LONG).show();
+                    } else if (firstname.length() > 32 || lastname.length() > 32) {
+                        // Check firstname && lastname
+                        Toast.makeText(getApplicationContext(),
+                                "Please shorten the name under 32 characters.",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        // Try Enter Inputs to Database
+                        AuthData autho = mFirebase.getAuth();
+                        if (autho != null) {
+                            // Success
+                            mFirebase.child("users").child(autho.getUid())
+                                    .child("firstname").setValue(firstname);
+                            mFirebase.child("users").child(autho.getUid())
+                                    .child("lastname").setValue(lastname);
+                            mFirebase.child("users").child(autho.getUid())
+                                    .child("age").setValue(age);
+                            finish();
+                        } else {
+                            // Failed
+                            Toast.makeText(getApplicationContext(), "Update Failed.",
+                                    Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }
@@ -127,6 +139,24 @@ public class UserEditActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    // Check Internet Connection
+    public boolean isConnected() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null) {
+            if (netInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                return true;
+            } else if (netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                return true;
+            }
+        } else {
+            Toast.makeText(this, "No Internet Connection.", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        Toast.makeText(this, "No Internet Connection.", Toast.LENGTH_LONG).show();
+        return false;
     }
 
     // Get User Info From Local Storage
