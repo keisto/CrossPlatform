@@ -136,18 +136,6 @@
                                     <segue destination="RNj-h3-I7t" kind="show" identifier="savePush" id="wJC-3B-wbg"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ge3-p4-agu">
-                                <rect key="frame" x="20" y="142" width="100" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="Oyj-8U-VZp"/>
-                                </constraints>
-                                <state key="normal" title="Cancel">
-                                    <color key="titleColor" red="1" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <segue destination="RNj-h3-I7t" kind="show" id="hai-2a-3Vb"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JdQ-dU-ocK">
                                 <rect key="frame" x="20" y="180" width="560" height="90"/>
                                 <constraints>
@@ -157,6 +145,19 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ge3-p4-agu">
+                                <rect key="frame" x="20" y="142" width="100" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="Oyj-8U-VZp"/>
+                                </constraints>
+                                <state key="normal" title="Cancel">
+                                    <color key="titleColor" red="1" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonClick:" destination="NqS-9U-jgD" eventType="touchUpInside" id="qj6-4C-gmX"/>
+                                    <segue destination="RNj-h3-I7t" kind="show" identifier="cancel" id="hai-2a-3Vb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.96078431369999995" green="0.97254901959999995" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -312,6 +313,18 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lEN-qG-Btr">
+                                <rect key="frame" x="165" y="483" width="270" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="KTP-JI-sN0"/>
+                                </constraints>
+                                <state key="normal" title="Delete">
+                                    <color key="titleColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonClick:" destination="RNj-h3-I7t" eventType="touchUpInside" id="dqS-H1-e0h"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2ME-LY-WFb">
                                 <rect key="frame" x="165" y="445" width="270" height="30"/>
                                 <constraints>
@@ -324,18 +337,6 @@
                                 <connections>
                                     <action selector="buttonClick:" destination="RNj-h3-I7t" eventType="touchUpInside" id="OlT-pR-4Lf"/>
                                     <segue destination="NqS-9U-jgD" kind="show" identifier="editPush" id="E5I-BC-51w"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lEN-qG-Btr">
-                                <rect key="frame" x="165" y="483" width="270" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="KTP-JI-sN0"/>
-                                </constraints>
-                                <state key="normal" title="Delete">
-                                    <color key="titleColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="buttonClick:" destination="RNj-h3-I7t" eventType="touchUpInside" id="dqS-H1-e0h"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -396,6 +397,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="wJC-3B-wbg"/>
+        <segue reference="hai-2a-3Vb"/>
     </inferredMetricsTieBreakers>
 </document>

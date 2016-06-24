@@ -18,6 +18,7 @@
 		B0642EDA1D06E77D00DD91FE /* CrossPlatformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0642ED91D06E77D00DD91FE /* CrossPlatformTests.swift */; };
 		B0642EE51D06E77D00DD91FE /* CrossPlatformUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0642EE41D06E77D00DD91FE /* CrossPlatformUITests.swift */; };
 		B0642EF31D07CC3000DD91FE /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0642EF21D07CC3000DD91FE /* EditViewController.swift */; };
+		B0646F041D193421007D6D57 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = B0646F031D193421007D6D57 /* Reachability.m */; };
 		B0D2131A1D0A194900CC9A03 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0D213191D0A194900CC9A03 /* GoogleService-Info.plist */; };
 		DDEED04B6B3393A972D604D6 /* Pods_CrossPlatform.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24D9E9011FF5EE60B57D7FB0 /* Pods_CrossPlatform.framework */; };
 		EF41FA1659EB1026363BB288 /* Pods_CrossPlatformUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8507F73FD385B6512650F91D /* Pods_CrossPlatformUITests.framework */; };
@@ -63,6 +64,8 @@
 		B0642EE41D06E77D00DD91FE /* CrossPlatformUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossPlatformUITests.swift; sourceTree = "<group>"; };
 		B0642EE61D06E77D00DD91FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0642EF21D07CC3000DD91FE /* EditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
+		B0646F021D193421007D6D57 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		B0646F031D193421007D6D57 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		B0D212D41D0A085500CC9A03 /* CrossPlatform-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CrossPlatform-Bridging-Header.h"; sourceTree = "<group>"; };
 		B0D213191D0A194900CC9A03 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B404FE8ED82FFD86425E9B89 /* Pods_CrossPlatformTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CrossPlatformTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -153,6 +156,8 @@
 				B0642EC51D06E77C00DD91FE /* Main.storyboard */,
 				B0642ECB1D06E77C00DD91FE /* Assets.xcassets */,
 				B0642ECD1D06E77C00DD91FE /* LaunchScreen.storyboard */,
+				B0646F021D193421007D6D57 /* Reachability.h */,
+				B0646F031D193421007D6D57 /* Reachability.m */,
 				B0642ED01D06E77C00DD91FE /* Info.plist */,
 				B0D213191D0A194900CC9A03 /* GoogleService-Info.plist */,
 				B0642EC81D06E77C00DD91FE /* CrossPlatform.xcdatamodeld */,
@@ -255,6 +260,7 @@
 				TargetAttributes = {
 					B0642EBD1D06E77C00DD91FE = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = SSZA2FVX6P;
 					};
 					B0642ED41D06E77C00DD91FE = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -446,6 +452,7 @@
 				B0642EC41D06E77C00DD91FE /* ViewController.swift in Sources */,
 				B0642ECA1D06E77C00DD91FE /* CrossPlatform.xcdatamodeld in Sources */,
 				B00FB0F01D07DC2100858D0A /* SelfViewController.swift in Sources */,
+				B0646F041D193421007D6D57 /* Reachability.m in Sources */,
 				B0642EC21D06E77C00DD91FE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -592,11 +599,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = CrossPlatform/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = sandbaks.CrossPlatform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CrossPlatform/CrossPlatform-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -608,11 +618,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = CrossPlatform/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = sandbaks.CrossPlatform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "CrossPlatform/CrossPlatform-Bridging-Header.h";
 			};
 			name = Release;

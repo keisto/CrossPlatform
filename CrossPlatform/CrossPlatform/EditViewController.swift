@@ -23,20 +23,31 @@ class EditViewController : UIViewController {
     let firebase = FIRDatabase.database().reference()
     
     var userEmail : String = ""
+    var refresher : NSTimer!
     
     // Actions 
     @IBAction func buttonClick (sender : UIButton) {
         // On Click Action by Tag
         switch (sender.tag) {
+        case 0:
+            // Tag 0 == Cancel
+            self.performSegueWithIdentifier("cancel", sender: nil)
+            break;
         case 1:
             // Tag 1 == Save
             if (self.firstname.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) == "" ||
                 self.lastname.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) == "" ||
                 self.age.text!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()) == "") {
                 self.errorLabel.text! = "Please enter All fields."
+            } else if (Int(self.age.text!) <= 0) {
+                self.errorLabel.text! = "Age should be more than 0... right?"
             } else {
                 self.errorLabel.text! = ""
-                saveAction()
+                if (reachStatus != NOCONNECTION) {
+                    saveAction()
+                } else {
+                    self.errorLabel.text! = "Please check internet connection."
+                }
             }
             break;
         default:
@@ -48,7 +59,13 @@ class EditViewController : UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Task(s)
-        loadUser()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.reachStatusChanged), name: "ReachStatusChanged", object: nil)
+        if(reachStatus != NOCONNECTION) {
+            loadUser()
+            refresher = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(EditViewController.refreshData), userInfo: nil, repeats: true)
+        } else {
+            self.errorLabel.text! = "Please check internet connection."
+        }
     }
     
     func saveAction() -> Void {
@@ -59,8 +76,7 @@ class EditViewController : UIViewController {
             if (error == nil) {
                 self.firebase.child("users").child(user!.uid).setValue(["firstname": self.firstname.text!,
                     "lastname": self.lastname.text!, "age": self.age.text!, "email": self.userEmail])
-               
-//                self.performSegueWithIdentifier("loginPush", sender: nil)
+                self.performSegueWithIdentifier("savePush", sender: nil)
             } else {
                 // Something Went Wrong
                 self.errorLabel.text = "Something went wrong."
@@ -82,8 +98,15 @@ class EditViewController : UIViewController {
                         self.lastname.text = snapshot.value!["lastname"] as? String
                         self.age.text = snapshot.value!["age"] as? String
                         self.userEmail = (snapshot.value!["email"] as? String)!
-        
                     })
+                    // Add Listener For Changeing Data
+                    self.firebase.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).observeEventType(.Value, withBlock: { (snapshot) in
+                        // Get user value
+                        self.firstname.text = snapshot.value!["firstname"] as? String
+                        self.lastname.text = snapshot.value!["lastname"] as? String
+                        self.age.text = snapshot.value!["age"] as? String
+                    })
+                    self.firebase.keepSynced(true)
                 } else {
                     // Something Went Wrong
                     self.errorLabel.text = "Please Enter Data."
@@ -91,5 +114,37 @@ class EditViewController : UIViewController {
             }
             
         }
+    }
+    
+    func reachStatusChanged() {
+        if (reachStatus == NOCONNECTION) {
+            self.errorLabel.text = "Internet Not Available."
+            refresher.invalidate()
+            firebase.removeAllObservers()
+        } else {
+            self.errorLabel.text = ""
+            loadUser()
+            refresher = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(EditViewController.refreshData), userInfo: nil, repeats: true)
+        }
+    }
+    
+    func refreshData() -> Void {
+        if (reachStatus != NOCONNECTION) {
+            self.firebase.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
+                // Get user value
+                self.firstname.text = snapshot.value!["firstname"] as? String
+                self.lastname.text = snapshot.value!["lastname"] as? String
+                self.age.text = snapshot.value!["age"] as? String
+            })
+        }
+    }
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
+        return false
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        refresher.invalidate()
+        firebase.removeAllObservers()
     }
 }
