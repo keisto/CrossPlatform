@@ -23,7 +23,6 @@ class EditViewController : UIViewController {
     let firebase = FIRDatabase.database().reference()
     
     var userEmail : String = ""
-    var refresher : NSTimer!
     
     // Actions 
     @IBAction func buttonClick (sender : UIButton) {
@@ -62,7 +61,6 @@ class EditViewController : UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.reachStatusChanged), name: "ReachStatusChanged", object: nil)
         if(reachStatus != NOCONNECTION) {
             loadUser()
-            refresher = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(EditViewController.refreshData), userInfo: nil, repeats: true)
         } else {
             self.errorLabel.text! = "Please check internet connection."
         }
@@ -119,32 +117,19 @@ class EditViewController : UIViewController {
     func reachStatusChanged() {
         if (reachStatus == NOCONNECTION) {
             self.errorLabel.text = "Internet Not Available."
-            refresher.invalidate()
             firebase.removeAllObservers()
         } else {
             self.errorLabel.text = ""
             loadUser()
-            refresher = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(EditViewController.refreshData), userInfo: nil, repeats: true)
         }
     }
     
-    func refreshData() -> Void {
-        if (reachStatus != NOCONNECTION) {
-            self.firebase.child("users").child((FIRAuth.auth()?.currentUser?.uid)!).observeSingleEventOfType(.Value, withBlock: { (snapshot) in
-                // Get user value
-                self.firstname.text = snapshot.value!["firstname"] as? String
-                self.lastname.text = snapshot.value!["lastname"] as? String
-                self.age.text = snapshot.value!["age"] as? String
-            })
-        }
-    }
     
     override func shouldPerformSegueWithIdentifier(identifier: String, sender: AnyObject?) -> Bool {
         return false
     }
     
     override func viewDidDisappear(animated: Bool) {
-        refresher.invalidate()
         firebase.removeAllObservers()
     }
 }

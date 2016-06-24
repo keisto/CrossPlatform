@@ -71,8 +71,7 @@ class SelfViewController : UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.reachStatusChanged), name: "ReachStatusChanged", object: nil)
         if(reachStatus != NOCONNECTION) {
             loadUser()
-            refresher = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(EditViewController.refreshData), userInfo: nil, repeats: true)
-
+            refresher = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(SelfViewController.refreshData), userInfo: nil, repeats: true)
         }
     }
     
@@ -84,7 +83,7 @@ class SelfViewController : UIViewController {
         } else {
             self.errorLabel.text = ""
             loadUser()
-            refresher = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(EditViewController.refreshData), userInfo: nil, repeats: true)
+            refresher = NSTimer.scheduledTimerWithTimeInterval(10, target: self, selector: #selector(SelfViewController.refreshData), userInfo: nil, repeats: true)
         }
     }
     
